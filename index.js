@@ -2,6 +2,8 @@ module.exports = scope;
 scope.replace = replace;
 
 function scope (css, parent) {
+	if (!css) return css;
+
 	if (!parent) return css;
 
 	css = replace(css, parent + ' $1$2');
