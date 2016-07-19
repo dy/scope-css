@@ -1,6 +1,6 @@
 # scope-css [![unstable](http://badges.github.io/stability-badges/dist/unstable.svg)](http://github.com/badges/stability-badges)
 
-Apply nesting to each selector in style string. Useful to create namespaced css for components, themes, applications etc. Also it is tiny.
+Prefix or nest each style selector in a css string. Useful to create namespaced css for components, themes, applications etc. Also it is tiny.
 
 ## Usage
 
@@ -14,19 +14,19 @@ scope(`
 .my-component-element {}
 `, '.parent');
 
-//↓
-
+/*
 `
 .parent .my-component {}
 .parent .my-component-element {}
 `
+*/
 ```
 
 ## API
 
 ## css = scope(css, parent)
 
-Return css string with each rule prefixed with the parent selector. Note that self `parent` selectors will be ignored. Also each `:host` keyword will be replaced with `parent` value. Example:
+Return css string with each rule prefixed with the parent selector. Note that `parent` selector itself will be ignored. Also each `:host` keyword will be replaced with `parent` value. Example:
 
 ```js
 scope(`
@@ -37,7 +37,7 @@ scope(`
 	.my-element {}
 `, '.panel');
 
-//↓
+/*
 `
 	.panel {}
 	.panel {}
@@ -45,11 +45,22 @@ scope(`
 	.panel .my-element {}
 	.panel .my-element {}
 `
+*/
 ```
 
 ## css = scope.replace(css, 'replacement $1$2')
 
-Apply replace for css, where $1 is matched selectors and $2 is rules for the selectors. It does not do any self/host detection, so use it for more flexible replacements.
+Apply replace to css, where `$1` is matched selectors and `$2` is rules for the selectors. It does not do any self/host detection, so use it for more flexible replacements.
+
+```js
+scope.replace(`
+	.my-component, .my-other-component {
+		padding: 0;
+	}
+`, '$1');
+
+// `.my-component, my-other-component`
+```
 
 ## Credits
 
