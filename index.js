@@ -6,9 +6,13 @@ function scope (css, parent) {
 
 	css = replace(css, parent + ' $1$2');
 
+	//regexp.escape
+	let parentRe = parent.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
 	//replace self-selectors
-	css = css.replace(new RegExp('(' + parent + ') \\1(?=[\\s\\r\\n,{])', 'g'), '$1');
-	css = css.replace(new RegExp('(' + parent + ') :host', 'g'), '$1');
+	css = css.replace(new RegExp('(' + parentRe + ')\\s*\\1(?=[\\s\\r\\n,{])', 'g'), '$1');
+
+	css = css.replace(new RegExp('(' + parentRe + ')\\s*:host', 'g'), '$1');
 
 	return css;
 }

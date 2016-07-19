@@ -18,7 +18,8 @@
     "scope",
     "nest",
     "parent",
-    "selector"
+    "selector",
+    "sheetify"
   ],
   "author": "ΔY <df.creative@gmail.com>",
   "license": "MIT",

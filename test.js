@@ -38,6 +38,15 @@ assert.equal(scope(`
 .panel .my-element {}
 `);
 
+//tricky prefix case
+assert.equal(scope(`
+.settings-panel-label {font-size: 12px}
+:host {font-size: 10px;}
+`, '#abc-456'), `
+#abc-456 .settings-panel-label {font-size: 12px}
+#abc-456 {font-size: 10px;}
+`);
+
 let src = `.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
 .clearfix:after{clear:both;}
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
