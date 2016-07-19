@@ -1,0 +1,29 @@
+{
+  "name": "scope-css",
+  "version": "1.0.0",
+  "description": "Scope each css rule with specified selector, so to speak apply nesting to parent",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfcreative/scope-css.git"
+  },
+  "keywords": [
+    "css",
+    "style",
+    "insert-css",
+    "nesting",
+    "scope",
+    "nest",
+    "parent",
+    "selector"
+  ],
+  "author": "ΔY <df.creative@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dfcreative/scope-css/issues"
+  },
+  "homepage": "https://github.com/dfcreative/scope-css#readme"
+}
