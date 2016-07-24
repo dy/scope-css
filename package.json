@@ -1,6 +1,6 @@
 {
   "name": "scope-css",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Scope each css rule with specified selector, so to speak apply nesting to parent",
   "main": "index.js",
   "scripts": {
