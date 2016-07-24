@@ -1,6 +1,6 @@
 # scope-css [![unstable](http://badges.github.io/stability-badges/dist/unstable.svg)](http://github.com/badges/stability-badges)
 
-Prefix or nest each style selector in a css string. Useful to create namespaced css for components, themes, applications etc. Also it is tiny.
+Prefix or nest each style selector in a css string. Useful to create namespaced css for components, themes, applications, modular css etc. Also it is tiny.
 
 ## Usage
 

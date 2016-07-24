@@ -20,5 +20,8 @@ function scope (css, parent) {
 }
 
 function replace (css, replacer) {
+	//strip block comments
+	css = css.replace(/\/\*([\s\S]*?)\*\//g, '');
+
 	return css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, replacer);
 }

@@ -47,6 +47,32 @@ assert.equal(scope(`
 #abc-456 {font-size: 10px;}
 `);
 
+//block comments
+assert.equal(scope(`
+/* Default triangle styles are from control theme, just set display: block */
+.settings-panel-select-triangle {
+	position: absolute;
+	border-right: .3em solid transparent;
+	border-left: .3em solid transparent;
+	right: 2.5%;
+	height: 0;
+	z-index: 1;
+	pointer-events: none;
+}
+`, '.x'), `
+
+.x .settings-panel-select-triangle {
+	position: absolute;
+	border-right: .3em solid transparent;
+	border-left: .3em solid transparent;
+	right: 2.5%;
+	height: 0;
+	z-index: 1;
+	pointer-events: none;
+}
+`);
+
+//real use-case
 let src = `.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
 .clearfix:after{clear:both;}
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
