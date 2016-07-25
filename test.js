@@ -72,6 +72,37 @@ assert.equal(scope(`
 }
 `);
 
+//@ directives
+assert.equal(scope(`
+@supports (--css: variables) {
+	body {
+		--track-background: linear-gradient(to right, var(--active) 0, var(--active) var(--value), var(--bg) 0) no-repeat;
+	}
+}
+@import url("chrome://communicator/skin/") screen;
+@media (min-width: 440px) {
+	tag {--x: 1}
+}
+@font-face {
+	font-family: "Bitstream Vera Serif Bold";
+	src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
+}
+`, '.x'), `
+@supports (--css: variables) {
+.x 	body {
+		--track-background: linear-gradient(to right, var(--active) 0, var(--active) var(--value), var(--bg) 0) no-repeat;
+	}
+}
+@import url("chrome://communicator/skin/") screen;
+@media (min-width: 440px) {
+.x 	tag {--x: 1}
+}
+@font-face {
+	font-family: "Bitstream Vera Serif Bold";
+	src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
+}
+`);
+
 //real use-case
 let src = `.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
 .clearfix:after{clear:both;}
