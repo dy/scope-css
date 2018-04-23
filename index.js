@@ -20,6 +20,9 @@ function scope (css, parent) {
 	//revoke wrongly replaced @ statements, like @supports, @import, @media etc.
 	css = css.replace(new RegExp('(' + parentRe + ')\\s*@', 'g'), '@');
 
+	//revoke wrongly replaced :root blocks
+	css = css.replace(new RegExp('(' + parentRe + ')\\s*:root', 'g'), ':root');
+
 	return css;
 }
 

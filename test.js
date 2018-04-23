@@ -23,6 +23,17 @@ assert.equal(scope(
 .settings-panel {font-size: 11px;}
 `);
 
+//ignore :root
+assert.equal(scope(
+`
+.settings-panel-label {font-size: var(--font-size);}
+:root {--font-size: 11px;}
+`,'.settings-panel'),
+`
+.settings-panel .settings-panel-label {font-size: var(--font-size);}
+:root {--font-size: 11px;}
+`);
+
 //readme case
 assert.equal(scope(`
 .panel {}
