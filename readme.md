@@ -1,5 +1,4 @@
-# scope-css [![unstable](https://img.shields.io/badge/stability-unstable-green.svg)](http://github.com/badges/stability-badges)
-[![Build Status](https://img.shields.io/travis/dy/scope-css.svg)](https://travis-ci.org/dy/scope-css)
+# scope-css [![unstable](https://img.shields.io/badge/stability-unstable-green.svg)](http://github.com/badges/stability-badges) [![Build Status](https://img.shields.io/travis/dy/scope-css.svg)](https://travis-ci.org/dy/scope-css)
 
 Prefix or nest each style selector in a css string. Useful to create namespaced css for components, themes, applications, modular css etc. Also it is tiny.
 

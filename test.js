@@ -1,5 +1,5 @@
-const assert = require('assert');
-const scope = require('./');
+var assert = require('assert');
+var scope = require('./');
 
 //ignore self selector
 assert.equal(scope(
@@ -104,7 +104,7 @@ assert.equal(scope(`
 `);
 
 //real use-case
-let src = `.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
+var src = `.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
 .clearfix:after{clear:both;}
 .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
 .input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
@@ -178,7 +178,7 @@ label{display:block;margin-bottom:5px;}
 select,textarea,input[type=\"text\"],input[type=\"password\"],input[type=\"datetime\"],input[type=\"datetime-local\"],input[type=\"date\"],input[type=\"month\"],input[type=\"time\"],input[type=\"week\"],input[type=\"number\"],input[type=\"email\"],input[type=\"url\"],input[type=\"search\"],input[type=\"tel\"],input[type=\"color\"],.uneditable-input{display:inline-block;height:20px;padding:4px 6px;margin-bottom:9px;font-size:14px;line-height:20px;color:#555555;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
 input,textarea,.uneditable-input{width`;
 
-let result = `.bootstrap .clearfix{*zoom:1;}.bootstrap .clearfix:before,.bootstrap .clearfix:after{display:table;content:\"\";line-height:0;}
+var result = `.bootstrap .clearfix{*zoom:1;}.bootstrap .clearfix:before,.bootstrap .clearfix:after{display:table;content:\"\";line-height:0;}
 .bootstrap .clearfix:after{clear:both;}
 .bootstrap .hide-text{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;}
 .bootstrap .input-block-level{display:block;width:100%;min-height:30px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
