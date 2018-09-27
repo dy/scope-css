@@ -98,7 +98,19 @@ assert.equal(scope(`
 	font-family: "Bitstream Vera Serif Bold";
 	src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
 }
-`, '.x'), `
+@keyframes loading {
+	from {background: red;}
+	50%, +60.8%, -.3% {background: yellow;}
+	100% {background: green;}
+}
+@keyframes loading-2 {}
+.anim1 {
+	animation: infinite loading 4s;
+}
+.anim2 {
+	animation-name: loading-2;
+}
+`, '.x', 'xyz42-'), `
 @supports (--css: variables) {
 .x 	body {
 		--track-background: linear-gradient(to right, var(--active) 0, var(--active) var(--value), var(--bg) 0) no-repeat;
@@ -111,6 +123,18 @@ assert.equal(scope(`
 @font-face {
 	font-family: "Bitstream Vera Serif Bold";
 	src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
+}
+@keyframes xyz42-loading {
+	from {background: red;}
+	50%, +60.8%, -.3% {background: yellow;}
+	100% {background: green;}
+}
+@keyframes xyz42-loading-2 {}
+.x .anim1 {
+	animation: infinite xyz42-loading 4s;
+}
+.x .anim2 {
+	animation-name: xyz42-loading-2;
 }
 `);
 
