@@ -44,6 +44,27 @@ t('ignore :root', t => {
 	t.end()
 })
 
+t('nested commentary', t => {
+	t.equal(
+		scope.replace(`#result:before{content:\"/**/\"}`, '$1$2'),
+		`#result:before{content:"/**/"}`
+	)
+	t.equal(
+		scope.replace(`#result:before{content:\"abc/**/\"}`, '$1$2'),
+		`#result:before{content:"abc/**/"}`
+	)
+	t.equal(
+		scope.replace(`#result:before{content:\"a/bc/**/\"}`, '$1$2'),
+		`#result:before{content:"a/bc/**/"}`
+	)
+	t.equal(
+		scope.replace(`#result:before{content:\"/**/\"}/*abc*/`, '$1$2'),
+		`#result:before{content:"/**/"}`
+	)
+
+	t.end()
+})
+
 t('readme case', t => {
 	t.equal(scope(c`
 	.panel {}
