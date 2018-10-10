@@ -1,15 +1,9 @@
 'use strict'
 
+var stripComments = require('strip-css-comments')
+
 module.exports = scope
 scope.replace = replace
-
-var stripCommentsRE
-try {
-	// lookbehind RE (not supported by some browsers)
-	stripCommentsRE = new RegExp('(?<!content:\\s*["\'](?:[^\\/]|\\/[^\*])*)\\/\\*([\\s\\S]*?)\\*\\/', 'gi')
-} catch (e) {
-	stripCommentsRE = /\/\*([\s\S]*?)\*\//gi
-}
 
 function scope (css, parent) {
 	if (!css) return css
@@ -37,35 +31,7 @@ function scope (css, parent) {
 }
 
 function replace (css, replacer) {
-	css = css.replace(stripCommentsRE, '')
+	css = stripComments(css)
 
 	return css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, replacer)
-}
-
-
-//helpers to escape unfoldable things in strings
-function escape (str, arr) {
-	//hide comments
-	str = str.replace(/\/\*([^\*]|[\r\n]|(\*+([^\*\/]|[\r\n])))*\*+\//g, function (match) {
-		return ' ___comment' + arr.push(match);
-	});
-	//Escape strings
-	str = str.replace(/\'[^']*\'/g, function (match) {
-		return ' ___string' + arr.push(match);
-	});
-	str = str.replace(/\"[^"]*\"/g, function (match) {
-		return ' ___string' + arr.push(match);
-	});
-
-	return str;
-}
-
-function unescape (str, arr) {
-	// unhide strings & comments
-	for (var i = arr.length; i--;) {
-		str = str.replace(' ___string' + (i + 1), arr[i]);
-		str = str.replace(' ___comment' + (i + 1), arr[i]);
-	}
-
-	return str;
 }
