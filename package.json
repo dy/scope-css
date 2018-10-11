@@ -1,7 +1,7 @@
 {
   "name": "scope-css",
-  "version": "1.1.0",
-  "description": "Scope each css rule with specified selector, so to speak apply nesting to parent",
+  "version": "1.1.1",
+  "description": "Scope each css rule with a selector, ie. nest into parent",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
@@ -26,5 +26,12 @@
   "bugs": {
     "url": "https://github.com/dy/scope-css/issues"
   },
-  "homepage": "https://github.com/dy/scope-css#readme"
+  "homepage": "https://github.com/dy/scope-css#readme",
+  "devDependencies": {
+    "cln": "^1.1.0",
+    "tape": "^4.9.1"
+  },
+  "dependencies": {
+    "strip-css-comments": "^3.0.0"
+  }
 }
