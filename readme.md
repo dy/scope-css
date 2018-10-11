@@ -24,9 +24,9 @@ scope(`
 
 ## API
 
-## css = scope(css, parent)
+## css = scope(css, parent, prefix)
 
-Return css string with each rule prefixed with the parent selector. Note that `parent` selector itself will be ignored. Also each `:host` keyword will be replaced with `parent` value. Example:
+Return css string with each rule prefixed with the parent selector. Note that `parent` selector itself will be ignored. Also each `:host` keyword will be replaced with `parent` value. Names that can't be prefixed with a selector (such as animation names) will be prefixed with `prefix` (which will be randomly generated if missing). Example:
 
 ```js
 scope(`
@@ -34,7 +34,8 @@ scope(`
 	:host {}
 	:host .my-element {}
 	.panel .my-element {}
-	.my-element {}
+        @keyframes my-animation {}
+	.my-element {animation: my-animation;}
 `, '.panel');
 
 /*
@@ -43,7 +44,8 @@ scope(`
 	.panel {}
 	.panel .my-element {}
 	.panel .my-element {}
-	.panel .my-element {}
+	@keyframes p57s89-my-animation {}
+	.panel .my-element {animation: p57s89-my-animation;}
 `
 */
 ```

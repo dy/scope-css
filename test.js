@@ -153,6 +153,37 @@ t('@ directives', t => {
 	t.end()
 })
 
+t('named animations', t => {
+	t.equal(scope(c`
+	@keyframes loading {
+		from {background: red;}
+		50%, +60.8%, -.3% {background: yellow;}
+		100% {background: green;}
+	}
+	@keyframes loading-2 {}
+	.anim1 {
+		animation: infinite loading 4s;
+	}
+	.anim2 {
+		animation-name: loading-2;
+	}
+	`, '.x', 'xyz42-'), c`
+	@keyframes xyz42-loading {
+		from {background: red;}
+		50%, +60.8%, -.3% {background: yellow;}
+		100% {background: green;}
+	}
+	@keyframes xyz42-loading-2 {}
+	.x .anim1 {
+		animation: infinite xyz42-loading 4s;
+	}
+	.x .anim2 {
+		animation-name: xyz42-loading-2;
+	}
+	`)
+	t.end()
+})
+
 t('real use-case', t => {
 	var src = c`.clearfix{*zoom:1;}.clearfix:before,.clearfix:after{display:table;content:\"\";line-height:0;}
 	.clearfix:after{clear:both;}
