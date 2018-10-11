@@ -65,6 +65,70 @@ t('nested commentary', t => {
 	t.end()
 })
 
+t('handle @keyframes', t => {
+	t.equal(scope(c`
+		@keyframes loading {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+		@keyframes loading2 {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+	`, 'abc'), c`
+		@keyframes loading {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+		@keyframes loading2 {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+	`)
+
+	t.equal(scope(c`
+		@keyframes loading {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+	`, 'abc', { keyframes: true }), c`
+		@keyframes abc-loading {
+		    from { top: 0; }
+		    to { top: 100px; }
+		}
+	`)
+
+	t.equal(scope(c`
+	@keyframes loading {
+		from {background: red;}
+		50%, +60.8%, -.3% {background: yellow;}
+		100% {background: green;}
+	}
+	@keyframes loading-2 {}
+	.anim1 {
+		animation: infinite loading 4s;
+	}
+	.anim2 {
+		animation-name: loading-2;
+	}
+	`, '.x', {keyframes: 'xyz42-'}), c`
+	@keyframes xyz42-loading {
+		from {background: red;}
+		50%, +60.8%, -.3% {background: yellow;}
+		100% {background: green;}
+	}
+	@keyframes xyz42-loading-2 {}
+	.x .anim1 {
+		animation: infinite xyz42-loading 4s;
+	}
+	.x .anim2 {
+		animation-name: xyz42-loading-2;
+	}
+	`)
+
+	t.end()
+})
+
 t('readme case', t => {
 	t.equal(scope(c`
 	.panel {}

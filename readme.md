@@ -24,7 +24,7 @@ scope(`
 
 ## API
 
-## css = scope(css, parent)
+## css = scope(css, parent, options?)
 
 Return css string with each rule prefixed with the parent selector. Note that `parent` selector itself will be ignored. Also each `:host` keyword will be replaced with `parent` value. Example:
 
@@ -45,6 +45,31 @@ scope(`
 	.panel .my-element {}
 	.panel .my-element {}
 `
+*/
+```
+
+Options can scope keyframes via `{ keyframes: bool|prefixStr }` option, eg.
+
+```js
+scope(`
+	.panel {
+		animation: infinite loading 4s;
+	}
+	@keyframes loading {
+		from { top: 0; }
+		to { top: 100px; }
+	}
+`, '.panel', { keyframes: true })
+
+/*
+`
+.panel {
+	animation: infinite panel-loading 4s;
+}
+@keyframes panel-loading {
+	from { top: 0; }
+	to { top: 100px; }
+`)
 */
 ```
 
