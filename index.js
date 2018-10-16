@@ -1,7 +1,8 @@
 'use strict'
 
-var stripComments = require('strip-css-comments')
 var slugify = require('slugify')
+var escaper = require('escaper')
+var stripComments = require('strip-css-comments')
 
 module.exports = scope
 scope.replace = replace
@@ -56,7 +57,18 @@ function scope (css, parent, o) {
 }
 
 function replace (css, replacer) {
+	var arr = []
+
 	css = stripComments(css)
 
-	return css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, replacer)
+	// escape strings etc.
+	css = escaper.replace(css, true, arr)
+
+	css = css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, replacer)
+
+	// insert comments, strings etc. back
+	css = escaper.paste(css, arr)
+
+	return css
 }
+

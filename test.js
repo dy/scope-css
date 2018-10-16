@@ -157,6 +157,15 @@ t('tricky prefix case', t => {
 	t.end()
 })
 
+t('curly braces with strings', t => {
+	t.equal(
+		scope('x {content:\"{}\"}', '.test'),
+		'.test x {content:"{}"}'
+	)
+
+	t.end()
+})
+
 t('block comments', t => {
 	t.equal(c(scope(`
 	/* Default triangle styles are from control theme, just set display: block */
