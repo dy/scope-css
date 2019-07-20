@@ -84,7 +84,7 @@ scope.replace(`
 	}
 `, '$1');
 
-// `.my-component, my-other-component`
+// `.my-component, .my-other-component`
 ```
 
 ## Credits
