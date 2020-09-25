@@ -87,6 +87,10 @@ scope.replace(`
 // `.my-component, .my-other-component`
 ```
 
+## See also
+
+* [scoped css polyfill](https://github.com/samthor/scoped)
+
 ## Credits
 
 Based on [this question](http://stackoverflow.com/questions/12575845/what-is-the-regex-of-a-css-selector).
