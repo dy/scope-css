@@ -1,74 +1,58 @@
-'use strict'
+const esc = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+export default function scope(css, parent, o) {
+  if (!css || !parent) return css
 
-var slugify = require('slugify')
-var escaper = require('escaper')
-var stripComments = require('strip-css-comments')
+  o = typeof o === 'string' ? { keyframes: o } : (o || {})
 
-module.exports = scope
+  css = replace(css, parent + ' $1$2')
+
+  const pre = esc(parent)
+
+  css = css
+    .replace(new RegExp(pre + '\\s+' + pre + '(?=[\\s\\r\\n,{])', 'g'), parent)
+    .replace(new RegExp(pre + '\\s*:host', 'g'), parent)
+    .replace(new RegExp(pre + '\\s*@', 'g'), '@')
+    .replace(new RegExp(pre + '\\s*:root', 'g'), ':root')
+
+  if (o.keyframes) {
+    const anims = new Set()
+    css.replace(/@keyframes\s+([a-zA-Z0-9_-]+)\s*{/g, (_, n) => anims.add(n))
+
+    const slug = parent.replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '')
+    const pfx = o.keyframes === true ? slug + '-' : String(o.keyframes)
+
+    for (const name of anims) {
+      const nn = pfx + name
+      css = css
+        .replace(new RegExp('(@keyframes\\s+)' + name + '(\\s*{)', 'g'), '$1' + nn + '$2')
+        .replace(new RegExp('(animation(?:-name)?\\s*:[^;]*\\s*)' + name + '([\\s;}])', 'g'), '$1' + nn + '$2')
+    }
+  }
+
+  css = css.replace(
+    new RegExp('(' + pre + ' )(\\s*(?:to|from|[+-]?(?:(?:\\.\\d+)|(?:\\d+(?:\\.\\d*)?))%))(?=[\\s\\r\\n,{])', 'g'),
+    '$2'
+  )
+
+  return css
+}
+
+export function replace(css, replacer) {
+  const strs = []
+
+  css = css.replace(/(["'])(?:(?!\1)[^\\]|\\.)*\1/g, m => '\x00' + strs.push(m) + '\x00')
+
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  css = css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, (_, sel, end) => {
+    const trimmed = sel.trim()
+    const idx = sel.indexOf(trimmed[0])
+    const lead = idx > 0 ? sel.slice(0, idx) : ''
+    const trail = sel.slice(sel.lastIndexOf(trimmed.slice(-1)) + 1)
+    return lead + replacer.replace('$1', trimmed).replace('$2', trail + end)
+  })
+
+  return css.replace(/\x00(\d+)\x00/g, (_, i) => strs[i - 1])
+}
+
 scope.replace = replace
-
-function scope (css, parent, o) {
-	if (!css) return css
-
-	if (!parent) return css
-
-	if (typeof o === 'string') o = {keyframes: o}
-	if (!o) o = {keyframes: false}
-
-	css = replace(css, parent + ' $1$2')
-
-	//regexp.escape
-	var parentRe = parent.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-
-	//replace self-selectors
-	css = css.replace(new RegExp('(' + parentRe + ')\\s*\\1(?=[\\s\\r\\n,{])', 'g'), '$1')
-
-	//replace `:host` with parent
-	css = css.replace(new RegExp('(' + parentRe + ')\\s*:host', 'g'), '$1')
-
-	//revoke wrongly replaced @ statements, like @supports, @import, @media etc.
-	css = css.replace(new RegExp('(' + parentRe + ')\\s*@', 'g'), '@')
-
-	//revoke wrongly replaced :root blocks
-	css = css.replace(new RegExp('(' + parentRe + ')\\s*:root', 'g'), ':root')
-
-	//animations: prefix animation anmes
-	var animations = [],
-	    animationNameRe = /@keyframes\s+([a-zA-Z0-9_-]+)\s*{/g,
-	    match
-	while ((match = animationNameRe.exec(css)) !== null) {
-		if (animations.indexOf(match[1]) < 0)
-			animations.push(match[1])
-	}
-
-	var slug = slugify(parent)
-
-	animations.forEach(function (name) {
-		var newName = (o.keyframes === true ? slug + '-' : typeof o.keyframes === 'string' ? o.keyframes : '') + name
-		css = css.replace(new RegExp('(@keyframes\\s+)' + name + '(\\s*{)', 'g'),
-				  '$1' + newName + '$2')
-		css = css.replace(new RegExp('(animation(?:-name)?\\s*:[^;]*\\s*)' + name + '([\\s;}])', 'g'),
-				  '$1' + newName + '$2')
-	})
- 	//animation: revoke wrongly replaced keyframes
-	css = css.replace(new RegExp('(' + parentRe + ' )(\\s*(?:to|from|[+-]?(?:(?:\\.\\d+)|(?:\\d+(?:\\.\\d*)?))%))(?=[\\s\\r\\n,{])', 'g'), '$2')
-
-	return css
-}
-
-function replace (css, replacer) {
-	var arr = []
-
-	css = stripComments(css)
-
-	// escape strings etc.
-	css = escaper.replace(css, true, arr)
-
-	css = css.replace(/([^\r\n,{}]+)(,(?=[^}]*{)|\s*{)/g, replacer)
-
-	// insert comments, strings etc. back
-	css = escaper.paste(css, arr)
-
-	return css
-}
-

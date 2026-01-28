@@ -1,12 +1,12 @@
 'use strict'
 
-var scope = require('./')
-var t = require('tape')
-var c = require('cln')
+import scope, { replace } from './index.js'
+import t, {is} from 'tst'
+import c from 'cln'
 
 
 t('ignore self selector', t => {
-	t.equal(scope(
+	is(scope(
 	c`
 	.settings-panel-label {font-size: 13px}
 	.settings-panel {font-size: 11px;}
@@ -15,11 +15,10 @@ t('ignore self selector', t => {
 	.settings-panel .settings-panel-label {font-size: 13px}
 	.settings-panel {font-size: 11px;}
 	`);
-	t.end()
 })
 
 t('ignore :host', t => {
-	t.equal(scope(
+	is(scope(
 	c`
 	.settings-panel-label {font-size: 13px}
 	:host {font-size: 11px;}
@@ -28,11 +27,10 @@ t('ignore :host', t => {
 	.settings-panel .settings-panel-label {font-size: 13px}
 	.settings-panel {font-size: 11px;}
 	`);
-	t.end()
 })
 
 t('ignore :root', t => {
-	t.equal(scope(
+	is(scope(
 	c`
 	.settings-panel-label {font-size: var(--font-size);}
 	:root {--font-size: 11px;}
@@ -41,32 +39,30 @@ t('ignore :root', t => {
 	.settings-panel .settings-panel-label {font-size: var(--font-size);}
 	:root {--font-size: 11px;}
 	`);
-	t.end()
 })
 
 t('nested commentary', t => {
-	t.equal(
-		scope.replace(`#result:before{content:\"/**/\"}`, '$1$2'),
+	is(
+		replace(`#result:before{content:\"/**/\"}`, '$1$2'),
 		`#result:before{content:"/**/"}`
 	)
-	t.equal(
-		scope.replace(`#result:before{content:\"abc/**/\"}`, '$1$2'),
+	is(
+		replace(`#result:before{content:\"abc/**/\"}`, '$1$2'),
 		`#result:before{content:"abc/**/"}`
 	)
-	t.equal(
-		scope.replace(`#result:before{content:\"a/bc/**/\"}`, '$1$2'),
+	is(
+		replace(`#result:before{content:\"a/bc/**/\"}`, '$1$2'),
 		`#result:before{content:"a/bc/**/"}`
 	)
-	t.equal(
-		scope.replace(`#result:before{content:\"/**/\"}/*abc*/`, '$1$2'),
+	is(
+		replace(`#result:before{content:\"/**/\"}/*abc*/`, '$1$2'),
 		`#result:before{content:"/**/"}`
 	)
 
-	t.end()
 })
 
 t('handle @keyframes', t => {
-	t.equal(scope(c`
+	is(scope(c`
 		@keyframes loading {
 		    from { top: 0; }
 		    to { top: 100px; }
@@ -86,7 +82,7 @@ t('handle @keyframes', t => {
 		}
 	`)
 
-	t.equal(scope(c`
+	is(scope(c`
 		@keyframes loading {
 		    from { top: 0; }
 		    to { top: 100px; }
@@ -98,7 +94,7 @@ t('handle @keyframes', t => {
 		}
 	`)
 
-	t.equal(scope(c`
+	is(scope(c`
 	@keyframes loading {
 		from {background: red;}
 		50%, +60.8%, -.3% {background: yellow;}
@@ -126,11 +122,10 @@ t('handle @keyframes', t => {
 	}
 	`)
 
-	t.end()
 })
 
 t('readme case', t => {
-	t.equal(scope(c`
+	is(scope(c`
 	.panel {}
 	:host {}
 	:host .my-element {}
@@ -143,31 +138,28 @@ t('readme case', t => {
 	.panel .my-element {}
 	.panel .my-element {}
 	`);
-	t.end()
 })
 
 t('tricky prefix case', t => {
-	t.equal(scope(c`
+	is(scope(c`
 	.settings-panel-label {font-size: 12px}
 	:host {font-size: 10px;}
 	`, '#abc-456'), c`
 	#abc-456 .settings-panel-label {font-size: 12px}
 	#abc-456 {font-size: 10px;}
 	`);
-	t.end()
 })
 
 t('curly braces with strings', t => {
-	t.equal(
+	is(
 		scope('x {content:\"{}\"}', '.test'),
 		'.test x {content:"{}"}'
 	)
 
-	t.end()
 })
 
 t('block comments', t => {
-	t.equal(c(scope(`
+	is(c(scope(`
 	/* Default triangle styles are from control theme, just set display: block */
 	.settings-panel-select-triangle {
 		position: absolute;
@@ -190,11 +182,10 @@ t('block comments', t => {
 		pointer-events: none;
 	}
 	`);
-	t.end()
 })
 
 t('@ directives', t => {
-	t.equal(scope(c`
+	is(scope(c`
 	@supports (--css: variables) {
 		body {
 			--track-background: linear-gradient(to right, var(--active) 0, var(--active) var(--value), var(--bg) 0) no-repeat;
@@ -223,7 +214,6 @@ t('@ directives', t => {
 		src: url("https://mdn.mozillademos.org/files/2468/VeraSeBd.ttf");
 	}
 	`);
-	t.end()
 })
 
 t('real use-case', t => {
@@ -375,6 +365,89 @@ t('real use-case', t => {
 	.bootstrap select,.bootstrap textarea,.bootstrap input[type=\"text\"],.bootstrap input[type=\"password\"],.bootstrap input[type=\"datetime\"],.bootstrap input[type=\"datetime-local\"],.bootstrap input[type=\"date\"],.bootstrap input[type=\"month\"],.bootstrap input[type=\"time\"],.bootstrap input[type=\"week\"],.bootstrap input[type=\"number\"],.bootstrap input[type=\"email\"],.bootstrap input[type=\"url\"],.bootstrap input[type=\"search\"],.bootstrap input[type=\"tel\"],.bootstrap input[type=\"color\"],.bootstrap .uneditable-input{display:inline-block;height:20px;padding:4px 6px;margin-bottom:9px;font-size:14px;line-height:20px;color:#555555;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;}
 	.bootstrap input,.bootstrap textarea,.bootstrap .uneditable-input{width`;
 
-	t.equal(scope(src, '.bootstrap'), result);
-	t.end()
+	is(scope(src, '.bootstrap'), result);
+})
+
+t('edge: empty/null inputs', t => {
+	is(scope('', '.x'), '')
+	is(scope(null, '.x'), null)
+	is(scope(undefined, '.x'), undefined)
+	is(scope('.a{}', ''), '.a{}')
+	is(scope('.a{}', null), '.a{}')
+})
+
+t('edge: multiple selectors', t => {
+	is(scope('.a, .b, .c { color: red }', '.x'),
+		'.x .a, .x .b, .x .c { color: red }')
+})
+
+t('edge: pseudo-elements', t => {
+	is(scope('.a::before, .a::after { content: "" }', '.x'),
+		'.x .a::before, .x .a::after { content: "" }')
+})
+
+t('edge: attribute selectors', t => {
+	is(scope('[data-x="y"] { color: red }', '.x'),
+		'.x [data-x="y"] { color: red }')
+	is(scope('input[type="text"] { color: red }', '.x'),
+		'.x input[type="text"] { color: red }')
+})
+
+t('edge: escaped quotes in strings', t => {
+	is(scope('.a { content: "a\\"b" }', '.x'),
+		'.x .a { content: "a\\"b" }')
+	is(scope(".a { content: 'a\\'b' }", '.x'),
+		".x .a { content: 'a\\'b' }")
+})
+
+t('edge: nested media queries', t => {
+	is(scope(c`
+	@media screen {
+		@media (min-width: 100px) {
+			.a { color: red }
+		}
+	}
+	`, '.x'), c`
+	@media screen {
+		@media (min-width: 100px) {
+		.x 	.a { color: red }
+		}
+	}
+	`)
+})
+
+t('edge: :host with compound selectors', t => {
+	is(scope(':host(.active) { color: red }', '.panel'),
+		'.panel(.active) { color: red }')
+})
+
+t('edge: universal selector', t => {
+	is(scope('* { box-sizing: border-box }', '.x'),
+		'.x * { box-sizing: border-box }')
+})
+
+t('edge: child/sibling combinators', t => {
+	is(scope('.a > .b + .c ~ .d { color: red }', '.x'),
+		'.x .a > .b + .c ~ .d { color: red }')
+})
+
+t('edge: @font-face preserved', t => {
+	is(scope(c`
+	@font-face {
+		font-family: "Test";
+		src: url("test.woff");
+	}
+	`, '.x'), c`
+	@font-face {
+		font-family: "Test";
+		src: url("test.woff");
+	}
+	`)
+})
+
+t('edge: special parent chars', t => {
+	is(scope('.a { color: red }', '#id-123'),
+		'#id-123 .a { color: red }')
+	is(scope('.a { color: red }', '[data-scope]'),
+		'[data-scope] .a { color: red }')
 })
