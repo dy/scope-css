@@ -30,7 +30,6 @@
   "homepage": "https://github.com/dy/scope-css#readme",
   "devDependencies": {
     "cln": "^1.1.0",
-    "tape": "^4.9.1",
     "tst": "^9.2.1"
   }
 }
